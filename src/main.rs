@@ -15,16 +15,16 @@ fn main() {
 
     println!(
         "  
-┌──────────────────
-│  {}@{}
-├──────────────────
-│   OS: {}
-│   Kernel: {}
-│   Uptime: {}
-│   Shell: {}
-│   CPU: {}
-│   Memory: {} MiB / {} MiB
-└──────────────────
+    ╭───────────────┄ 
+    │  \u{eb99} \u{ea9f} {}@{}
+    ├───────────────┄ 
+    │   OS      \u{e712}   {}
+    │   Kernel  \u{f109}   {}
+    │   Uptime  \u{e385}   {}
+    │   Shell   \u{f489}   {}
+    │   CPU     \u{f4bc}   {}
+    │   Memory  \u{eace}   {} MiB / {} MiB
+    ╰───────────────┄ 
              ",
         fetch.username,
         fetch.hostname,
