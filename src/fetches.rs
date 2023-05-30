@@ -44,6 +44,6 @@ pub fn fetch() -> Fetch {
         shell,
         cpu,
         used_mem: sys.used_memory() / 1_048_576,
-        total_mem: sys.free_memory() / 1_048_576,
+        total_mem: sys.total_memory() / 1_048_576,
     }
 }
