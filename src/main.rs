@@ -1,6 +1,10 @@
 mod fetches;
 use fetches::fetch;
 
+use comfy_table::presets::UTF8_FULL;
+use comfy_table::modifiers::UTF8_ROUND_CORNERS;
+use comfy_table::*;
+
 fn main() {
     let fetch = fetch();
     let (days, hours, minutes) = fetch.uptime;
@@ -13,27 +17,62 @@ fn main() {
         format!("{days} days, {hours} hours, {minutes} minutes")
     };
 
-    println!(
-        "  
-    ╭───────────────┄ 
-    │  \u{eb99} \u{ea9f} {}@{}
-    ├───────────────┄ 
-    │   OS      \u{e712}   {}
-    │   Kernel  \u{f109}   {}
-    │   Uptime  \u{e385}   {}
-    │   Shell   \u{f489}   {}
-    │   CPU     \u{f4bc}   {}
-    │   Memory  \u{eace}   {} MiB / {} MiB
-    ╰───────────────┄ 
-             ",
-        fetch.username,
-        fetch.hostname,
-        fetch.os,
-        fetch.kernel,
-        uptime,
-        fetch.shell,
-        fetch.cpu,
-        fetch.used_mem,
-        fetch.total_mem
-    );
+    let mut table = Table::new();
+    table.load_preset(UTF8_FULL)
+        .apply_modifier(UTF8_ROUND_CORNERS)
+        .set_content_arrangement(ContentArrangement::Dynamic)
+        .set_width(80)
+        .set_header(vec![
+            String::from("\u{eb99}"),
+            String::from("\u{ea9f}"),
+            format!("{}@{}", fetch.hostname, fetch.username)
+            ])
+        .add_row(vec![
+                 Cell::new("OS").add_attribute(Attribute::Bold),
+                 Cell::new("\u{e712}").fg(Color::Red),
+                 Cell::new(&fetch.os)
+        ])
+        .add_row(vec![
+                 Cell::new("Kernel").add_attribute(Attribute::Bold),
+                 Cell::new("\u{f109}").fg(Color::Yellow),
+                 Cell::new(&fetch.kernel)
+        ])
+        .add_row(vec![
+                 Cell::new("Uptime").add_attribute(Attribute::Bold),
+                 Cell::new("\u{e385}").fg(Color::Green),
+                 Cell::new(&uptime)
+        ])
+        .add_row(vec![
+                 Cell::new("Shell").add_attribute(Attribute::Bold),
+                 Cell::new("\u{f489}").fg(Color::Cyan),
+                 Cell::new(&fetch.shell)
+        ])
+        .add_row(vec![
+                 Cell::new("CPU").add_attribute(Attribute::Bold),
+                 Cell::new("\u{f4bc}").fg(Color::Blue),
+                 Cell::new(&fetch.cpu)
+        ])
+        .add_row(vec![
+                 Cell::new("Memory").add_attribute(Attribute::Bold),
+                 Cell::new("\u{eace}").fg(Color::Magenta),
+                 Cell::new(format!("{} MiB / {} MiB", fetch.used_mem, fetch.total_mem))
+        ]);
+
+    let table = format_table(&mut table);
+
+    println!("{table}");
+}
+
+fn format_table(table: &mut Table) -> &mut Table {
+    table.set_style(TableComponent::VerticalLines, ' ');
+    table.remove_style(TableComponent::HorizontalLines);
+    table.remove_style(TableComponent::MiddleIntersections);
+    table.set_style(TableComponent::MiddleHeaderIntersections, '─');
+    table.remove_style(TableComponent::LeftBorderIntersections);
+    table.remove_style(TableComponent::RightBorderIntersections);
+    table.set_style(TableComponent::TopBorderIntersections, '─');
+    table.set_style(TableComponent::BottomBorderIntersections, '─');
+    table.set_style(TableComponent::HeaderLines, '─');
+    table.set_style(TableComponent::LeftHeaderIntersection, '├');
+    table.set_style(TableComponent::RightHeaderIntersection, '┤')
 }
