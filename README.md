@@ -1,4 +1,4 @@
-# <img src=".data/icon.png" width="25" height="25"> Arifetch
+# <img src=".data/icon.png" width="40" height="40"> Arifetch
 
 **A simple system fetch built with Rust**
 
