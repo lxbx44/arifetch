@@ -25,7 +25,7 @@ fn main() {
         .set_header(vec![
             String::from("\u{eb99}"),
             String::from("\u{ea9f}"),
-            format!("{}@{}", fetch.hostname, fetch.username)
+            format!("{}@{}", fetch.username, fetch.hostname)
             ])
         .add_row(vec![
                  Cell::new("OS").add_attribute(Attribute::Bold),

@@ -2,7 +2,7 @@
 
 **A simple system fetch built with Rust**
 
-*By Aria Fibla and Pol Fernàndez*
+*By Aria Fibla*
 
 ![](.data/arifetch.png)
 
