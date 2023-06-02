@@ -20,12 +20,12 @@ pub fn fetch() -> Fetch {
     sys.refresh_all();
     
     // Gets the shell path from the enviroment variables
-    let shell_path = env::var("SHELL").unwrap_or_else(|_| def.clone());
+    let shell_path = env::var("SHELL");
     
-    let shell = match shell_path.split('/').last() {
+    let shell = match shell_path {
         // If the envoriment variable exists, give the last item on the path which should be the binary
-        Some(shell) => shell.to_string(),
-        None => {
+        Ok(shell) => shell.split('/').last().unwrap_or(&def).to_string(),
+        Err(_) => {
             // If the envoriment variable doesn't exist and you're on windows, check if you're
             // using Powershell or CMD
             if cfg!(target_family = "windows") {
