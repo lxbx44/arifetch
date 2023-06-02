@@ -31,8 +31,14 @@ pub fn fetch() -> Fetch {
             if cfg!(target_os = "windows") {
                 println!("Target is windows!");
                 let output = match Command::new("echo %PATH%").output() {
-                    Ok(output) => String::from_utf8(output.stdout).unwrap_or(def.clone()),
-                    Err(_) => def.clone(),
+                    Ok(output) => {
+                        println!("There is output!");
+                        String::from_utf8(output.stdout).unwrap_or(def.clone())
+                    }
+                    Err(_) => {
+                        println!("There is no output");
+                        def.clone()
+                    }
                 };
 
                 // "Echo %PATH%" on Powershell will just "%PATH%". On CMD it outputs the PATH
