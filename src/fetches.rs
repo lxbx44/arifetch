@@ -29,7 +29,7 @@ pub fn fetch() -> Fetch {
             // If the envoriment variable doesn't exist and you're on windows, check if you're
             // using Powershell or CMD
             if cfg!(target_family = "windows") {
-                let output = match Command::new("echo %PATH%").output() {
+                let output = match Command::new("echo").arg("%PATH%").output() {
                     Ok(output) => {
                         println!("There is output!");
                         String::from_utf8(output.stdout).unwrap_or(def.clone())
