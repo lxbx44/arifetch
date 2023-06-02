@@ -1,4 +1,4 @@
-use std::{env, time::Duration, process::Command};
+use std::{env, time::Duration};
 use sysinfo::{CpuExt, System, SystemExt};
 use whoami::username;
 
@@ -29,25 +29,7 @@ pub fn fetch() -> Fetch {
             // If the envoriment variable doesn't exist and you're on windows, check if you're
             // using Powershell or CMD
             if cfg!(target_family = "windows") {
-                let output = match Command::new("echo").arg("%PATH%").output() {
-                    Ok(output) => {
-                        println!("There is output!");
-                        String::from_utf8(output.stdout).unwrap_or(def.clone())
-                    }
-                    Err(err) => {
-                        println!("There is no output, {err}");
-                        def.clone()
-                    }
-                };
-
-                // "Echo %PATH%" on Powershell will just "%PATH%". On CMD it outputs the PATH
-                // envoriment variable.
-                if output == *"%PATH%" {
-                    String::from("Powershell")
-                } else {
-                    String::from("CMD")
-                }
-
+                String::from("CMD or Powershell")
             } else {
                 def.clone()
             }
