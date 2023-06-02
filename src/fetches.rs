@@ -1,4 +1,4 @@
-use std::{env, time::Duration};
+use std::{env, time::Duration, process::Command};
 use sysinfo::{CpuExt, System, SystemExt};
 use whoami::username;
 
@@ -18,13 +18,35 @@ pub fn fetch() -> Fetch {
     let mut sys = System::new_all();
     let def = String::from("Unkown");
     sys.refresh_all();
-
+    
+    // Gets the shell path from the enviroment variables
     let shell_path = env::var("SHELL").unwrap_or_else(|_| def.clone());
-    let shell = shell_path
-        .split('/')
-        .last()
-        .unwrap_or("Unknown")
-        .to_string();
+    
+    let shell = match shell_path.split('/').last() {
+        // If the envoriment variable exists, give the last item on the path which should be the binary
+        Some(shell) => shell.to_string(),
+        None => {
+            // If the envoriment variable doesn't exist and you're on windows, check if you're
+            // using Powershell or CMD
+            if cfg!(target_os = "windows") {
+                let output = match Command::new("echo %PATH%").output() {
+                    Ok(output) => String::from_utf8(output.stdout).unwrap_or(def.clone()),
+                    Err(_) => def.clone(),
+                };
+
+                // "Echo %PATH%" on Powershell will just "%PATH%". On CMD it outputs the PATH
+                // envoriment variable.
+                if output == *"%PATH%" {
+                    String::from("Powershell")
+                } else {
+                    String::from("CMD")
+                }
+
+            } else {
+                def.clone()
+            }
+        }
+    };
 
     let cpu_info = sys.cpus().iter().next();
     let cpu = cpu_info.map_or_else(|| def.clone(), |info| info.brand().to_string());
