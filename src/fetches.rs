@@ -29,14 +29,13 @@ pub fn fetch() -> Fetch {
             // If the envoriment variable doesn't exist and you're on windows, check if you're
             // using Powershell or CMD
             if cfg!(target_family = "windows") {
-                println!("Target is windows!");
                 let output = match Command::new("echo %PATH%").output() {
                     Ok(output) => {
                         println!("There is output!");
                         String::from_utf8(output.stdout).unwrap_or(def.clone())
                     }
-                    Err(_) => {
-                        println!("There is no output");
+                    Err(err) => {
+                        println!("There is no output, {err}");
                         def.clone()
                     }
                 };
@@ -50,7 +49,6 @@ pub fn fetch() -> Fetch {
                 }
 
             } else {
-                println!("Target isn't windows!");
                 def.clone()
             }
         }
