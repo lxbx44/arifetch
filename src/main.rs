@@ -1,9 +1,16 @@
 mod fetches;
 use fetches::fetch;
 
-use comfy_table::presets::UTF8_FULL;
-use comfy_table::modifiers::UTF8_ROUND_CORNERS;
-use comfy_table::*;
+use comfy_table::{
+    presets::UTF8_FULL,
+    modifiers::UTF8_ROUND_CORNERS,
+    Attribute,
+    Cell,
+    Color,
+    ContentArrangement,
+    Table,
+    TableComponent
+};
 
 fn main() {
     let fetch = fetch();
@@ -40,7 +47,7 @@ fn main() {
         .add_row(vec![
                  Cell::new("Uptime").add_attribute(Attribute::Bold),
                  Cell::new("\u{e385}").fg(Color::Green),
-                 Cell::new(&uptime)
+                 Cell::new(uptime)
         ])
         .add_row(vec![
                  Cell::new("Shell").add_attribute(Attribute::Bold),

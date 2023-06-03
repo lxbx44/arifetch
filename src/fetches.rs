@@ -18,13 +18,23 @@ pub fn fetch() -> Fetch {
     let mut sys = System::new_all();
     let def = String::from("Unkown");
     sys.refresh_all();
-
-    let shell_path = env::var("SHELL").unwrap_or_else(|_| def.clone());
-    let shell = shell_path
-        .split('/')
-        .last()
-        .unwrap_or("Unknown")
-        .to_string();
+    
+    // Gets the shell path from the enviroment variables
+    let shell_path = env::var("SHELL");
+    
+    let shell = match shell_path {
+        // If the envoriment variable exists, give the last item on the path which should be the binary
+        Ok(shell) => shell.split('/').last().unwrap_or(&def).to_string(),
+        Err(_) => {
+            // If the envoriment variable doesn't exist and you're on windows, check if you're
+            // using Powershell or CMD
+            if cfg!(target_family = "windows") {
+                String::from("CMD or Powershell")
+            } else {
+                def.clone()
+            }
+        }
+    };
 
     let cpu_info = sys.cpus().iter().next();
     let cpu = cpu_info.map_or_else(|| def.clone(), |info| info.brand().to_string());

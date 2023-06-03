@@ -20,4 +20,4 @@ arifetch
 
 ## Manual Installation
 
-- Download the files from the [releases](https://github.com/lxbx44/arifetch/releases/) tab or from the `app/` directory.
+- Download the files from the [releases](https://github.com/lxbx44/arifetch/releases/) tab.
