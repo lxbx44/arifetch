@@ -24,7 +24,7 @@ pub fn fetch() -> Fetch {
     
     let shell = match shell_path {
         // If the envoriment variable exists, give the last item on the path which should be the binary
-        Ok(shell) => shell.split('/').last().unwrap_or(&def).to_string(),
+        Ok(shell) => shell.to_string(),
         Err(_) => {
             // If the envoriment variable doesn't exist and you're on windows, check if you're
             // using Powershell or CMD
